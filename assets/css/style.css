@@ -1,0 +1,23 @@
+.mx-5 {
+    margin-left: -50rem!important;
+}
+.bg-danger,.btn-danger
+{
+    background-color: #780A25!important;
+}
+.text-danger
+{
+    color: #780A25!important;
+}
+.border-danger
+{
+    border-color:#780A25!important;
+}
+.fullheight
+{
+    height: 100vh!important;
+    background: linear-gradient(45deg, black, transparent);
+}
+.input{
+    border-color: white!important;
+}
