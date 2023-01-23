@@ -157,7 +157,7 @@ class Userimp extends Database
             $stmt->bindParam(':password', $this->password);
             if ($stmt->execute()) {
                         $msg = 'Click on the activation link to verify your email. <br><br>
-                            <a href="http://localhost/CultureDev/verifytoken.php?token=' . $this->token . '"> Click here to verify email</a>
+                            <a href="http://192.168.64.2/Blog-CultureDev.to-/verifytoken.php?token=' . $this->token . '"> Click here to verify email</a>
                         ';
                         require './PHPMailer/src/Exception.php';
                         require './PHPMailer/src/PHPMailer.php';
@@ -169,28 +169,23 @@ class Userimp extends Database
                 
                             try{
                                 //Server settings
-                                $mail->SMTPDebug = SMTP::DEBUG_SERVER; //Enable verbose debug output
-                                $mail->isSMTP(); //Send using SMTP
-                                $mail->Host = 'smtp.mailosaur.net'; //Set the SMTP server to send through
-                                $mail->SMTPAuth = true; //Enable SMTP authentication
-                                $mail->Username = 'obc94ny2@mailosaur.net'; //SMTP username
-                                $mail->Password = 'TpsSgejFDLVn9mx3';
-                                // enable TLS encryption                          //SMTP password
-                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                                //Enable implicit TLS encryption
-                                // Port 587 the default mail submission port. and will provide the best result
-                                // Port 587, coupled with TLS encryption
-                                $mail->Port = 465; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-                                $mail->From = 'obc94ny2@mailosaur.net';
-                                $mail->Sender = 'obc94ny2@mailosaur.net';
+                                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+                                $mail->isSMTP();                                            //Send using SMTP
+                                $mail->Host       = 'smtp.hostinger.com';                     //Set the SMTP server to send through
+                                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+                                $mail->Username   = 'test@virtualprovision.ma';                     //SMTP username
+                                $mail->Password   = 'this5655^^&U';                               //SMTP password
+                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+                                $mail->Port       = 465;  
+                                $mail->From = 'test@virtualprovision.ma';
+                                $mail->Sender = 'test@virtualprovision.ma';
                                 //Recipients
-                                $mail->setFrom('obc94ny2@mailosaur.net', 'CultureDev 2022');
+                                $mail->setFrom('test@virtualprovision.ma', 'CultureDev 2022');
                                 $mail->addAddress($this->email, 'CultureDev team');
                                 //Add a recipient
                                 //$mail->addAddress('ellen@example.com');
                                 //Name is optional
-                                $mail->addReplyTo('obc94ny2@mailosaur.net', 'CultureDev team');
+                                $mail->addReplyTo('test@virtualprovision.ma', 'CultureDev team');
                                 //$mail->addCC('cc@example.com');
                                 //$mail->addBCC('bcc@example.com');
 

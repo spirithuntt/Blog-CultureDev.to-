@@ -9,7 +9,19 @@ include('./controllers/crud.php');
 ?>
 <?php
 $crud = new crud();
-if (isset($_POST['save'])){
+if(isset($_POST['save'])){
+    $data = array(
+        'title' => $_POST['title'],
+        'description' => $_POST['summary'],
+        'admin_id' => 20,
+        'category_id' => $_POST['category'],
+        'blog' => $_POST['Blog'],
+    );
+    $crud->create('article', $data);
+}
+if(isset($_GET['delete'])){
+    $id = $_GET['delete'];
+    $crud->delete('article', $id);
 }
 ?>
 <!-- stats cards -->
@@ -80,12 +92,12 @@ if (isset($_POST['save'])){
 <div class="modal fade" id="modal-task">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="scripts.php" method="POST" id="form"></form>
+            <form  method="POST" id="form">
             <div class="modal-body">
                 <input type="hidden" id="task-id" name='id'>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Title:</label>
-                    <input type="text" class="form-control" id="recipient-name">
+                    <input type="text" class="form-control" name="title" id="recipient-name">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Category</label>
@@ -143,30 +155,33 @@ if (isset($_POST['save'])){
             <th class="text-center" scope="col" name="img">Img</th>
             <th class="text-center" scope="col" name="title">Title</th>
             <th class="text-center" scope="col" name="category">Category</th>
-            <th class="text-center" scope="col" name="description">Description</th>
-            <th class="text-center" scope="col" name="text">text</th>
+            <th class="text-center" scope="col" name="description">summary</th>
+            <th class="text-center" scope="col" name="blog">Blog</th>
+            <th class="text-center" scope="col"></th></th>
         </tr>
     </thead>
     <tbody>
         <?php
+                    // <td class='align-middle'><img class='' src='../assets/img/" . $row['image'] . "' alt='postImg' width='50px'>
+                    // </td>
         $crud = new crud();
         $result = $crud->read('article');
         foreach ($result as $row) {
             echo "<tr class='text-center'>
-            <td class='align-middle'><img class='' src='../assets/img/" . $row['image'] . "' alt='postImg' width='50px'>
-            </td>
             <td class='align-middle'>" . $row['title'] . "</td>
-            <td class='align-middle'>" . $row['category'] . "</td>
-            <td class='align-middle'>" . $row['summary'] . "</td>
+            <td class='align-middle'>" . $row['title'] . "</td>
+            <td class='align-middle'>" . $row['category_id'] . "</td>
+            <td class='align-middle'>" . $row['description'] . "</td>
+            <td class='align-middle'>" . $row['blog'] . "</td>
             <td class='align-middle'>
-                <!-- responsive -->
                 <div class='d-flex justify-content-center'>
-                    <a href='#' type='button' class='btn btn-warning d-flex' ></i>Update</a>
-                    <a href='#' type='button' class='btn btn-danger d-flex mx-2 border'></i>Delete</a>
+                    <a href='#modal-task' data-bs-toggle='modal' type='submit' class='btn btn-primary d-flex border'><i class='bi bi-pencil-square me-2 p'></i>Edit</a>
+                    <a href='dashboard.php?delete=" . $row['id'] . "' class='btn btn-danger d-flex border' type='submit' name='deleteArticle'><i class='bi bi-trash me-2 p'></i>Delete</a>
                 </div>
             </td>
         </tr>";
         }
+        // <td class='align-middle'>" . $row['Blog'] . "</td>
         ?>
 
     </tbody>

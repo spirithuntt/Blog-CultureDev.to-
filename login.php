@@ -31,7 +31,7 @@ $islogedin = new IslogedIn();
                     echo "<div class='alert alert-warning'>Please verify your email</div>";
                 }
                 ?>
-                                                <img src="assets/img/logo.png" alt="logo" class="img-fluid" width="60%">
+                <img src="assets/img/logo.png" alt="logo" class="img-fluid" width="60%">
 
                     <h4 class="text-start text-white">Log In</h4>
                     <p class="text-white mb-4">Login with your account to access</p>

@@ -17,15 +17,24 @@ if(isset($_GET['delete'])){
 }
 if(isset($_POST['add'])){
   $data = $_POST['name'];
+  $data = array(
+    'name' => $data
+);
   $crud->create('category', $data);
 }
 //update category
 if(isset($_POST['saveChanges'])){
-  $id = $_POST['id'];
-  $data = $_POST['categoryName'];
-  $crud->update('category', $id, $data);
-  
+  $id = $_POST['cid'];
+  // echo $id;
+  $name = $_POST['cname'];
+  $data = array(
+    'name' => $name,
+    'id' => $id
+);
+  $crud->update('category', $name, $id);
+  // return $name;
 }
+// echo $name;
 
 ?>
 <div class="row">
@@ -73,24 +82,25 @@ if(isset($_POST['saveChanges'])){
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <input name="id"type="hidden" id="id";  value="<?php echo $data['id'] ?>">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form method="POST">
           <div class="mb-3">
             <label for="categoryName" class="col-form-label">Category</label>
-            <input type="text" class="form-control" id="categoryName" name="input" value="<?php echo $category['name'] ?>">
+            <input type="text" class="form-control" id="categoryName" name="cname" value="">
+            <input type="text" id="categoryid" name="cid" value="">
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" name="saveChanges" id= "saveChanges" data-bs-dismiss="modal">Save</button>
+        </div>
         </form>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" name="saveChanges" id= "saveChanges" data-bs-dismiss="modal">Save</button>
-      </div>
     </div>
   </div>
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
