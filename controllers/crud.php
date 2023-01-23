@@ -1,11 +1,12 @@
 <?php
 include(__DIR__.'/../models/db.php');
-class crud extends Database{
+class crud extends Database
+{
     // table is the name of the table to insert into
     // $data, an associative array containing the data to be inserted
     public function create($table, $data)
     {
-         $data = array(
+        $data = array(
             'name' => $data
         );
         //array keys returns an array containing all the keys of an input array.
@@ -16,14 +17,16 @@ class crud extends Database{
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
     }
-    public function read($table){
+    public function read($table)
+    {
         $sql = "SELECT * FROM $table";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
         return $results;
     }
-    public function update($table,$data,$id){
+    public function update($table, $data, $id)
+    {
         $sql = "UPDATE $table SET ";
         $sql .= "name = '$data' ";
         $sql .= "WHERE id = $id";
@@ -31,21 +34,24 @@ class crud extends Database{
         $stmt->execute();
     }
 
-       public function delete($table,$id){
+    public function delete($table, $id)
+    {
         $sql = "DELETE FROM $table WHERE id = $id";
         $stmt = $this->connect()->prepare($sql);
         $stmtExec = $stmt->execute();
-        if($stmtExec){
+        if ($stmtExec) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    public function readOne($table,$id){
+    public function readOne($table, $id)
+    {
         $sql = "SELECT * FROM $table WHERE id = $id";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll();
         return $results;
+
     }
 }

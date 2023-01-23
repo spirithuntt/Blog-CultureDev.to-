@@ -10,6 +10,7 @@ let validateCategoryForm = () =>{
     }
     return true;
 }
-function openmodal(name){
-    document.getElementById('recipient-name').value = name;
+function openmodal(name, id){
+    document.getElementById('categoryName').value = name;
+    document.getElementById('id').value = id;
 }

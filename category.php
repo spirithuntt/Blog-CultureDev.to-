@@ -19,11 +19,14 @@ if(isset($_POST['add'])){
   $data = $_POST['name'];
   $crud->create('category', $data);
 }
-if(isset($_POST['update'])){
-  $id = $_GET['update'];
-  $data = $crud->readOne('category', $id);
-  echo $data['name'];
+//update category
+if(isset($_POST['saveChanges'])){
+  $id = $_POST['id'];
+  $data = $_POST['categoryName'];
+  $crud->update('category', $id, $data);
+  
 }
+
 ?>
 <div class="row">
   <div class="col-12">
@@ -32,7 +35,7 @@ if(isset($_POST['update'])){
         <h5 class="card-title">Categories</h5>
         <form method="POST">
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Add Category" name="name" id= "name">
+            <input type="text"class="form-control" placeholder="Add Category" name="name" id= "name">
             <button class="btn btn-primary" type="submit" name="add" id="add" >Add</button>
           </div>
       </div>
@@ -54,7 +57,7 @@ if(isset($_POST['update'])){
                 <th scope="row"><?php echo $category['id'] ?></th>
                 <td><?php echo $category['name'] ?></td>
                 <td>
-                  <a href="category.php?update=<?php echo $category['id']; ?>" type="button" class="btn btn-sm btn-primary" onclick="openmodal('<?php echo $category['name']; ?>')" name="update" id="update" data-bs-toggle="modal" data-bs-target="#exampleModal" >Update</a>
+                  <a href="category.php?update=<?php echo $category['id']; ?>" type="button" class="btn btn-sm btn-primary" onclick="openmodal('<?php echo $category['name']; ?>', <?php echo $category['id']; ?>)" name="update" id="update" data-bs-toggle="modal" data-bs-target="#exampleModal">Update</a>
                   <a href="category.php?delete=<?php echo $category['id'];?>" type="button" class="btn btn-sm btn-danger" name="delete" id="delete">Delete</a>
                 </td>
               </tr>
@@ -70,21 +73,21 @@ if(isset($_POST['update'])){
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <input name="id" value="<?php echo $data['id'] ?>">
+      <input name="id"type="hidden" id="id";  value="<?php echo $data['id'] ?>">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Category</label>
-            <input type="text" class="form-control" id="recipient-name" name="input" value="<?php echo $category['name'] ?>">
+            <label for="categoryName" class="col-form-label">Category</label>
+            <input type="text" class="form-control" id="categoryName" name="input" value="<?php echo $category['name'] ?>">
           </div>
         </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" name="saveChanges" id= "saveChanges" data-bs-dismiss="modal">Save</button>
       </div>
     </div>
   </div>
