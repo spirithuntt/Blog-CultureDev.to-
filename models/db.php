@@ -17,12 +17,11 @@ class Database{
         $this->dbpass = "";
     }
 
-    protected function connect(){
+    public function connect(){
         try {
             $this->con = new PDO('mysql:host='.$this->host.';dbname='.$this->db, $this->username, $this->dbpass);
             $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $this->con;
-            
        } catch (PDOException $e) {
             throw new PDOException($e->getMessage(), (int)$e->getCode());
     }

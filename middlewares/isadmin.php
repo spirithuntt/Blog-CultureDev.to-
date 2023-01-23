@@ -5,6 +5,7 @@ class IsAdmin {
     {
         if($_SESSION['isadmin'] == 0){
             header('location: ./index.php');
+            
         }
     }
 }

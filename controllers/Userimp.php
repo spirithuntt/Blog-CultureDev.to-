@@ -1,13 +1,12 @@
-
 <?php
-include('./models/db.php');
-include('./controllers/User.php');
+include(__DIR__.'/../models/db.php');
+include(__DIR__.'/../controllers/user.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-class Userimp extends Database implements CRUD
+class Userimp extends Database
 {
     private $fname;
     private $lname;
@@ -123,10 +122,11 @@ class Userimp extends Database implements CRUD
         if (empty($this->fname) || empty($this->lname) || empty($this->email) || empty($this->password)) {
             echo '<div class="alert alert-warning">
             Please fill all the inputs.
-        </div>';
+            </div>';
         } elseif ($this->password == $this->password_comfirm) {
             $this->password = password_hash($this->password, PASSWORD_BCRYPT);
             $sql = "SELECT * FROM users WHERE email = :email";
+            echo "zes";
             $stmt = $this->connect()->prepare($sql);
             $stmt->bindParam(':email', $this->email);
             $stmt->execute();
@@ -135,88 +135,89 @@ class Userimp extends Database implements CRUD
                 echo '<div class="alert alert-warning">
                 Email already taken.
             </div>';
-                //condition for email format
-            } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                echo '<div class="alert alert-warning">
-                Invalid email format.</div>';
-                //condition for password length
-            } elseif (strlen($this->password) < 8) {
-                echo '<div class="alert alert-warning">
-                Password must be at least 8 characters long.</div>';
-            } else {
-                // :is placeholder
-                $this->token = md5(rand() . time());
-                $sql = "INSERT INTO users (fname, lname, email, token,  password) VALUES (:fname, :lname, :email, :token, :password)";
-                $stmt = $this->connect()->prepare($sql);
-                // pass their value as input, and receives the output value
-                // binds a value to the placeholder in the SQL
-                $stmt->bindParam(':fname', $this->fname);
-                $stmt->bindParam(':lname', $this->lname);
-                $stmt->bindParam(':email', $this->email);
-                $stmt->bindParam(':token', $this->token);
-                $stmt->bindParam(':password', $this->password);
-                if ($stmt->execute()) {
-                    $msg = 'Click on the activation link to verify your email. <br><br>
-                        <a href="http://localhost/FIFA/verifytoken.php?token=' . $this->token . '"> Click here to verify email</a>
-                    ';
-                    require './PHPMailer/src/Exception.php';
-                    require './PHPMailer/src/PHPMailer.php';
-                    require './PHPMailer/src/SMTP.php';
-                    //Import PHPMailer classes into the global namespace
-
-                    //Create an instance; passing `true` enables exceptions
-                    $mail = new PHPMailer(true);
-
-                    try {
-                        //Server settings
-                        $mail->SMTPDebug = SMTP::DEBUG_SERVER; //Enable verbose debug output
-                        $mail->isSMTP(); //Send using SMTP
-                        $mail->Host = 'smtp.hostinger.com'; //Set the SMTP server to send through
-                        $mail->SMTPAuth = true; //Enable SMTP authentication
-                        $mail->Username = ''; //SMTP username
-                        $mail->Password = '';
-                        // enable TLS encryption                          //SMTP password
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                        //Enable implicit TLS encryption
-                        // Port 587 the default mail submission port. and will provide the best result
-                        // Port 587, coupled with TLS encryption
-                        $mail->Port = 465; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-
-                        $mail->From = 'contact@virtualprovision.ma';
-                        $mail->Sender = 'contact@virtualprovision.ma';
-                        //Recipients
-                        $mail->setFrom('contact@virtualprovision.ma', 'Fifa 2022');
-                        $mail->addAddress($this->email, 'Fifa team');
-                        //Add a recipient
-                        //$mail->addAddress('ellen@example.com');
-                        //Name is optional
-                        $mail->addReplyTo('contact@virtualprovision.ma', 'fifa team');
-                        //$mail->addCC('cc@example.com');
-                        //$mail->addBCC('bcc@example.com');
-
-                        //Attachments
-                        //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-                        //set email format to HTML
-                        $mail->isHTML(true); //Set email format to HTML
-                        $mail->Subject = "welcome to fifa 2022" . $this->fname;
-                        $mail->Body = $this->email . "<br>" . $msg;
-                        //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-                        $mail->send();
-                        header('Location: ./login.php?verify=true');
-                    } catch (Exception $e) {
-                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    }
-                    header('Location: ./login.php?verify=true');
-                }
-            }
-        } else {
+            //condition for email format
+        } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             echo '<div class="alert alert-warning">
+            Invalid email format.</div>';
+            //condition for password length
+        } elseif (strlen($this->password) < 8) {
+            echo '<div class="alert alert-warning">
+            Password must be at least 8 characters long.</div>';
+        } else {
+            // :is placeholder
+            $this->token = md5(rand() . time());
+            $sql = "INSERT INTO users (fname, lname, email, token,  password) VALUES (:fname, :lname, :email, :token, :password)";
+            $stmt = $this->connect()->prepare($sql);
+            // pass their value as input, and receives the output value
+            // binds a value to the placeholder in the SQL
+            $stmt->bindParam(':fname', $this->fname);
+            $stmt->bindParam(':lname', $this->lname);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':token', $this->token);
+            $stmt->bindParam(':password', $this->password);
+            if ($stmt->execute()) {
+                        $msg = 'Click on the activation link to verify your email. <br><br>
+                            <a href="http://localhost/CultureDev/verifytoken.php?token=' . $this->token . '"> Click here to verify email</a>
+                        ';
+                        require './PHPMailer/src/Exception.php';
+                        require './PHPMailer/src/PHPMailer.php';
+                        require './PHPMailer/src/SMTP.php';
+                        //Import PHPMailer classes into the global namespace
+                
+                        //Create an instance; passing `true` enables exceptions
+                        $mail = new PHPMailer(true);
+                
+                            try{
+                                //Server settings
+                                $mail->SMTPDebug = SMTP::DEBUG_SERVER; //Enable verbose debug output
+                                $mail->isSMTP(); //Send using SMTP
+                                $mail->Host = 'smtp.mailosaur.net'; //Set the SMTP server to send through
+                                $mail->SMTPAuth = true; //Enable SMTP authentication
+                                $mail->Username = 'obc94ny2@mailosaur.net'; //SMTP username
+                                $mail->Password = 'TpsSgejFDLVn9mx3';
+                                // enable TLS encryption                          //SMTP password
+                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                                //Enable implicit TLS encryption
+                                // Port 587 the default mail submission port. and will provide the best result
+                                // Port 587, coupled with TLS encryption
+                                $mail->Port = 465; //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+                                $mail->From = 'obc94ny2@mailosaur.net';
+                                $mail->Sender = 'obc94ny2@mailosaur.net';
+                                //Recipients
+                                $mail->setFrom('obc94ny2@mailosaur.net', 'CultureDev 2022');
+                                $mail->addAddress($this->email, 'CultureDev team');
+                                //Add a recipient
+                                //$mail->addAddress('ellen@example.com');
+                                //Name is optional
+                                $mail->addReplyTo('obc94ny2@mailosaur.net', 'CultureDev team');
+                                //$mail->addCC('cc@example.com');
+                                //$mail->addBCC('bcc@example.com');
+
+                                //Attachments
+                                //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                                //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+                                //set email format to HTML
+                                $mail->isHTML(true); //Set email format to HTML
+                                $mail->Subject = "welcome to CultureDev 2022" . $this->fname;
+                                $mail->Body = $this->email . "<br>" . $msg;
+                                //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                                $mail->send();
+                                header('Location: ./login.php?verify=true');
+                            } catch (Exception $e) {
+                                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                            }
+                            header('Location: ./login.php?verify=true');
+                        }
+                    }
+                } else {
+                    echo '<div class="alert alert-warning">
             passwords dont match
         </div>';
-        }
+                }
+            
     }
     // login method
     public function login()
@@ -235,7 +236,7 @@ class Userimp extends Database implements CRUD
             $num = $stmt->rowCount();
             if ($num > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if (password_verify($this->password, $row['password'])) {
+                if (password_verify($this->password, $row['password'])){
                     if ($row['isactive'] == 1) {
                         $_SESSION['id'] = $row['id'];
                         $_SESSION['fname'] = $row['fname'];
@@ -286,7 +287,7 @@ class Userimp extends Database implements CRUD
             $stmt->bindParam(':token', $this->token);
             if ($stmt->execute()) {
                 $msg = 'Click on the link to reset your password. <br><br>
-                    <a href="http://localhost/FIFA/newpassword.php?token=' . $this->token . '"> Click here to reset password</a>
+                    <a href="http://localhost/CultureDev/newpassword.php?token=' . $this->token . '"> Click here to reset password</a>
                 ';
                 require './PHPMailer/src/Exception.php';
                 require './PHPMailer/src/PHPMailer.php';
@@ -302,8 +303,8 @@ class Userimp extends Database implements CRUD
                     $mail->isSMTP(); //Send using SMTP
                     $mail->Host = 'smtp.hostinger.com'; //Set the SMTP server to send through
                     $mail->SMTPAuth = true; //Enable SMTP authentication
-                    $mail->Username = ''; //SMTP username
-                    $mail->Password = ''; //SMTP password
+                    $mail->Username = 'test@virtualprovision.ma'; //SMTP username
+                    $mail->Password = 'myPASSwordISsecure#$%1'; //SMTP password
                     //Enable implicit TLS encryption
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                     // Port 587 the default mail submission port. and will provide the best result
@@ -312,12 +313,12 @@ class Userimp extends Database implements CRUD
                     $mail->From = 'contact@virtualprovision.ma';
                     $mail->Sender = 'contact@virtualprovision.ma';
                     //Recipients
-                    $mail->setFrom('contact@virtualprovision.ma', 'Fifa 2022');
-                    $mail->addAddress($this->email, 'Fifa team');
+                    $mail->setFrom('contact@virtualprovision.ma', 'CultureDev 2022');
+                    $mail->addAddress($this->email, 'CultureDev team');
                     //Add a recipient
                     //$mail->addAddress('ellen@example.com');
                     //Name is optional
-                    $mail->addReplyTo('contact@virtualprovision.ma', 'fifa team');
+                    $mail->addReplyTo('contact@virtualprovision.ma', 'CultureDev team');
                     //$mail->addCC('cc@example.com');
                     //$mail->addBCC('bcc@example.com');
 
@@ -327,7 +328,7 @@ class Userimp extends Database implements CRUD
 
                     //set email format to HTML
                     $mail->isHTML(true); //Set email format to HTML
-                    $mail->Subject = "welcome to fifa 2022" . $this->fname;
+                    $mail->Subject = "welcome to CultureDev 2022" . $this->fname;
                     $mail->Body = $this->email . "<br>" . $msg;
                     //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
                     $mail->send();
@@ -493,4 +494,5 @@ class Userimp extends Database implements CRUD
         </div>';
         }
     }
+    
 }
