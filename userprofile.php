@@ -26,7 +26,7 @@ include("./middlewares/isLoggedin.php");
         $user->showUser();
     }
     if(!isset($_SESSION['id'])){
-        echo '<div class="alert alert-danger">
+        echo '<div class="alert alert-primary">
             your account has been deleted please sign up again.
             <a class="btn btn-dark" href="signup.php">sign up</a>
         </div>';
