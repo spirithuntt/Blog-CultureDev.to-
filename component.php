@@ -1,12 +1,3 @@
-
-<?php
-// include('./middlewares/isLoggedin.php');
-// include("./middlewares/isadmin.php");
-
-// $islogedin = new IslogedIn();
-// $isadmin = new IsAdmin();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 

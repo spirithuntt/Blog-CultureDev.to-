@@ -54,6 +54,14 @@ class crud extends Database
         $results = $stmt->fetchAll();
         return $results;
     }
+    public function readArticle()
+    {
+        $sql = "SELECT * FROM article INNER JOIN category ON article.category_id = category.id";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchAll();
+        return $results;
+    }
     public function updateArticle($table, $id, $title, $category, $summary, $blog)
     {
         $sql = "UPDATE $table SET title = '$title', category_id = '$category', description = '$summary', blog = '$blog' WHERE id = $id";
@@ -64,5 +72,13 @@ class crud extends Database
         } else {
             return false;
         }
+    }
+    public function statistics($table)
+    {
+        $sql = "SELECT COUNT(*) FROM $table";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+        $results = $stmt->fetchColumn();
+        return $results;
     }
 }

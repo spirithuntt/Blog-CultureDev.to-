@@ -4,14 +4,13 @@ include('./middlewares/isadmin.php');
 include('./middlewares/isLoggedin.php');
 include('./controllers/crud.php');
 // check if user is admin
-// $islogedin = new IslogedIn();
-// $isadmin = new IsAdmin();
+$islogedin = new IslogedIn();
+$isadmin = new IsAdmin();
 $crud = new crud();
 $id = $_POST['idA'];
 $data = $crud->readOne('article', $id);
-//if saveEdits is set in the form
 if(isset($_POST['saveEdits'])) {
-    //get the data from the form
+    //the data from the form
     $id = $_POST['idA'];
     $title = $_POST['title'];
     $category = $_POST['category'];
