@@ -28,7 +28,7 @@ class crud extends Database
         $stmt = $this->connect()->prepare($sql);
         $stmtExec = $stmt->execute();
         if ($stmtExec) {
-            return true;
+            header('Location: dashboard.php');
         } else {
             return false;
         }
@@ -40,7 +40,8 @@ class crud extends Database
         $stmt = $this->connect()->prepare($sql);
         $stmtExec = $stmt->execute();
         if ($stmtExec) {
-        // header('Location: ../views/dashbo.php') PPPPPRRRROBLEEEEMEEE
+        //header location to dashboard.php
+        header('Location: dashboard.php');
         } else {
             return false;
         }
@@ -52,6 +53,16 @@ class crud extends Database
         $stmt->execute();
         $results = $stmt->fetchAll();
         return $results;
-
+    }
+    public function updateArticle($table, $id, $title, $category, $summary, $blog)
+    {
+        $sql = "UPDATE $table SET title = '$title', category_id = '$category', description = '$summary', blog = '$blog' WHERE id = $id";
+        $stmt = $this->connect()->prepare($sql);
+        $stmtExec = $stmt->execute();
+        if ($stmtExec) {
+            header('Location: dashboard.php');
+        } else {
+            return false;
+        }
     }
 }

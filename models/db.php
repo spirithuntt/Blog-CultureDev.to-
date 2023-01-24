@@ -6,7 +6,6 @@ class Database{
     private $db;
     private $dbpass;
     private $con;
-    //db connect
     
 
     public function __construct()
@@ -18,11 +17,11 @@ class Database{
     }
 
     public function connect(){
-        try {
+        try{
             $this->con = new PDO('mysql:host='.$this->host.';dbname='.$this->db, $this->username, $this->dbpass);
             $this->con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $this->con;
-       } catch (PDOException $e) {
+       }catch (PDOException $e) {
             throw new PDOException($e->getMessage(), (int)$e->getCode());
     }
 }

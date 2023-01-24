@@ -94,7 +94,7 @@ if(isset($_GET['delete'])){
         <div class="modal-content">
             <form  method="POST" id="form">
             <div class="modal-body">
-                <input type="hidden" id="task-id" name='id'>
+                <input type="hidden" id="task-id" name='articleId'>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Title:</label>
                     <input type="text" class="form-control" name="title" id="recipient-name">
@@ -166,7 +166,7 @@ if(isset($_GET['delete'])){
                     // </td>
         $crud = new crud();
         $result = $crud->read('article');
-        foreach ($result as $row) {
+        foreach ($result as $row){
             echo "<tr class='text-center'>
             <td class='align-middle'>" . $row['title'] . "</td>
             <td class='align-middle'>" . $row['title'] . "</td>
@@ -175,8 +175,11 @@ if(isset($_GET['delete'])){
             <td class='align-middle'>" . $row['blog'] . "</td>
             <td class='align-middle'>
                 <div class='d-flex justify-content-center'>
-                    <a href='#modal-task' data-bs-toggle='modal' type='submit' class='btn btn-primary d-flex border'><i class='bi bi-pencil-square me-2 p'></i>Edit</a>
-                    <a href='dashboard.php?delete=" . $row['id'] . "' class='btn btn-danger d-flex border' type='submit' name='deleteArticle'><i class='bi bi-trash me-2 p'></i>Delete</a>
+                <form action='editpage.php' method='POST'>
+                <input type='hidden' name='idA' value='" . $row['id'] . "'>
+                    <button type='submit' class='btn btn-primary d-flex border'><i class='bi bi-pencil-square me-2 p' name='editArticle'></i>Edit</button>
+                </form>
+                    <a href='dashboard.php?delete=" . $row['id'] . "' class='btn btn-danger d-flex border' type='submit' id='deleteArticle' name='deleteArticle'><i class='bi bi-trash me-2 p'></i>Delete</a>
                 </div>
             </td>
         </tr>";
