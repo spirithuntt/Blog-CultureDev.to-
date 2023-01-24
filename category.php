@@ -6,8 +6,8 @@ include('./middlewares/isadmin.php');
 include('./middlewares/isLoggedin.php');
 include('./controllers/crud.php');
 // check if user is admin
-// $islogedin = new IslogedIn();
-// $isadmin = new IsAdmin();
+$islogedin = new IslogedIn();
+$isadmin = new IsAdmin();
 ?>
 <?php
 $crud = new crud();
@@ -22,19 +22,15 @@ if(isset($_POST['add'])){
 );
   $crud->create('category', $data);
 }
-//update category
 if(isset($_POST['saveChanges'])){
   $id = $_POST['cid'];
-  // echo $id;
   $name = $_POST['cname'];
   $data = array(
     'name' => $name,
     'id' => $id
 );
   $crud->update('category', $name, $id);
-  // return $name;
 }
-// echo $name;
 
 ?>
 <div class="row">

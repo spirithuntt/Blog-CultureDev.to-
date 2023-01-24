@@ -34,7 +34,6 @@ if (isset($_GET['token'])) {
             <div class="col-12 col-md-12 col-lg-4 col-sm-12 fullheight background px-5 bg-danger">
                 <div class="d-flex flex-column justify-content-center mt-5 sh">
                 <?php
-//update password
                     if(isset($_POST['submit']))
                     {
                     $user->setPassword($_POST['password']);

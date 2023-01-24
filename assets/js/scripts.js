@@ -1,3 +1,5 @@
+let articleId = document.getElementById("articleId");
+let title = document.getElementById("title");
 // getElementById('add').addEventListener('click', validateCategoryForm);
 // getElementById('edit').addEventListener('click', validateCategoryForm);
 

@@ -1,7 +1,6 @@
 <?php
 include ("./controllers/Userimp.php");
 include ("./middlewares/isLoggedin.php");
-// creating a an instance of the class islogedin
 $islogedin = new IslogedIn();
 ?>
 <html lang="en">

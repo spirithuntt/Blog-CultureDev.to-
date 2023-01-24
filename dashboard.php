@@ -4,8 +4,8 @@ include('./middlewares/isadmin.php');
 include('./middlewares/isLoggedin.php');
 include('./controllers/crud.php');
 // check if user is admin
-// $islogedin = new IslogedIn();
-// $isadmin = new IsAdmin();
+$islogedin = new IslogedIn();
+$isadmin = new IsAdmin();
 ?>
 <?php
 $crud = new crud();
@@ -25,14 +25,20 @@ if(isset($_GET['delete'])){
 }
 ?>
 <!-- stats cards -->
+<?php
+$statistics = new crud();
+$users = $statistics->statistics('users');
+$articles = $statistics->statistics('article');
+$categories = $statistics->statistics('category');
+?>
 <div class="row">
     <div class="col-12 col-md-6 col-lg-3 col-sm-12">
-        <div class="card bg-primary  text-white shadow-sm bg-body rounded">
+        <div class="card bg-primary  text-white shadow-sm  rounded">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="text">
                         <h5 class="card-title">Total Users</h5>
-                        <h4 class="mb-0">100</h4>
+                        <h4 class="mb-0"><?= $users?></h4>
                     </div>
                     <div class="icon">
                         <i class="bi bi-people-fill"></i>
@@ -42,12 +48,12 @@ if(isset($_GET['delete'])){
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-3 col-sm-12">
-        <div class="card bg-success text-white shadow-sm bg-body rounded">
+        <div class="card bg-success text-white shadow-sm  rounded">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="text">
                         <h5 class="card-title">Total Posts</h5>
-                        <h4 class="mb-0">30</h4>
+                        <h4 class="mb-0"><?= $articles?></h4>
                     </div>
                     <div class="icon">
                         <i class="bi bi-tags-fill"></i>
@@ -57,12 +63,12 @@ if(isset($_GET['delete'])){
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-3 col-sm-12">
-        <div class="card bg-warning text-white shadow-sm bg-body rounded">
+        <div class="card bg-warning text-white shadow-sm  rounded">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="text">
                         <h5 class="card-title">Total Categories</h5>
-                        <h4 class="mb-0">100</h4>
+                        <h4 class="mb-0"><?= $categories?></h4>
                     </div>
                     <div class="icon">
                         <i class="bi bi-tags-fill"></i>
@@ -72,7 +78,7 @@ if(isset($_GET['delete'])){
         </div>
     </div>
     <div class="col-12 col-md-6 col-lg-3 col-sm-12">
-        <div class="card bg-danger  text-white shadow-sm bg-body rounded">
+        <div class="card bg-danger  text-white shadow-sm  rounded">
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <div class="text">
@@ -94,7 +100,7 @@ if(isset($_GET['delete'])){
         <div class="modal-content">
             <form  method="POST" id="form">
             <div class="modal-body">
-                <input type="hidden" id="task-id" name='id'>
+                <input type="hidden" id="task-id" name='articleId'>
                 <div class="mb-3">
                     <label for="recipient-name" class="col-form-label">Title:</label>
                     <input type="text" class="form-control" name="title" id="recipient-name">
@@ -152,7 +158,7 @@ if(isset($_GET['delete'])){
 <table class="table table-light table-hover table-striped rounded" id="myTable">
     <thead>
         <tr>
-            <th class="text-center" scope="col" name="img">Img</th>
+            <th class="text-center" scope="col" name="img">title</th>
             <th class="text-center" scope="col" name="title">Title</th>
             <th class="text-center" scope="col" name="category">Category</th>
             <th class="text-center" scope="col" name="description">summary</th>
@@ -162,26 +168,26 @@ if(isset($_GET['delete'])){
     </thead>
     <tbody>
         <?php
-                    // <td class='align-middle'><img class='' src='../assets/img/" . $row['image'] . "' alt='postImg' width='50px'>
-                    // </td>
         $crud = new crud();
-        $result = $crud->read('article');
-        foreach ($result as $row) {
+        $result = $crud->readArticle();
+        foreach ($result as $row){
             echo "<tr class='text-center'>
             <td class='align-middle'>" . $row['title'] . "</td>
             <td class='align-middle'>" . $row['title'] . "</td>
-            <td class='align-middle'>" . $row['category_id'] . "</td>
+            <td class='align-middle'>" . $row['name'] . "</td>
             <td class='align-middle'>" . $row['description'] . "</td>
             <td class='align-middle'>" . $row['blog'] . "</td>
             <td class='align-middle'>
                 <div class='d-flex justify-content-center'>
-                    <a href='#modal-task' data-bs-toggle='modal' type='submit' class='btn btn-primary d-flex border'><i class='bi bi-pencil-square me-2 p'></i>Edit</a>
-                    <a href='dashboard.php?delete=" . $row['id'] . "' class='btn btn-danger d-flex border' type='submit' name='deleteArticle'><i class='bi bi-trash me-2 p'></i>Delete</a>
+                <form action='editpage.php' method='POST'>
+                <input type='hidden' name='idA' value='" . $row['id'] . "'>
+                    <button type='submit' class='btn btn-primary d-flex border'><i class='bi bi-pencil-square me-2 p' name='editArticle'></i>Edit</button>
+                </form>
+                    <a href='dashboard.php?delete=" . $row['id'] . "' class='btn btn-danger d-flex border' type='submit' id='deleteArticle' name='deleteArticle'><i class='bi bi-trash me-2 p'></i>Delete</a>
                 </div>
             </td>
         </tr>";
         }
-        // <td class='align-middle'>" . $row['Blog'] . "</td>
         ?>
 
     </tbody>

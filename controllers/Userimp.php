@@ -6,7 +6,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
 
-class Userimp extends Database
+class Userimp extends Database implements crudUser
 {
     private $fname;
     private $lname;
@@ -135,84 +135,84 @@ class Userimp extends Database
                 echo '<div class="alert alert-warning">
                 Email already taken.
             </div>';
-            //condition for email format
-        } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            echo '<div class="alert alert-warning">
+                //condition for email format
+            } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+                echo '<div class="alert alert-warning">
             Invalid email format.</div>';
-            //condition for password length
-        } elseif (strlen($this->password) < 8) {
-            echo '<div class="alert alert-warning">
+                //condition for password length
+            } elseif (strlen($this->password) < 8) {
+                echo '<div class="alert alert-warning">
             Password must be at least 8 characters long.</div>';
-        } else {
-            // :is placeholder
-            $this->token = md5(rand() . time());
-            $sql = "INSERT INTO users (fname, lname, email, token,  password) VALUES (:fname, :lname, :email, :token, :password)";
-            $stmt = $this->connect()->prepare($sql);
-            // pass their value as input, and receives the output value
-            // binds a value to the placeholder in the SQL
-            $stmt->bindParam(':fname', $this->fname);
-            $stmt->bindParam(':lname', $this->lname);
-            $stmt->bindParam(':email', $this->email);
-            $stmt->bindParam(':token', $this->token);
-            $stmt->bindParam(':password', $this->password);
-            if ($stmt->execute()) {
-                        $msg = 'Click on the activation link to verify your email. <br><br>
+            } else {
+                // :is placeholder
+                $this->token = md5(rand() . time());
+                $sql = "INSERT INTO users (fname, lname, email, token,  password) VALUES (:fname, :lname, :email, :token, :password)";
+                $stmt = $this->connect()->prepare($sql);
+                // pass their value as input, and receives the output value
+                // binds a value to the placeholder in the SQL
+                $stmt->bindParam(':fname', $this->fname);
+                $stmt->bindParam(':lname', $this->lname);
+                $stmt->bindParam(':email', $this->email);
+                $stmt->bindParam(':token', $this->token);
+                $stmt->bindParam(':password', $this->password);
+                if ($stmt->execute()) {
+                    $msg = 'Click on the activation link to verify your email. <br><br>
                             <a href="http://192.168.64.2/Blog-CultureDev.to-/verifytoken.php?token=' . $this->token . '"> Click here to verify email</a>
                         ';
-                        require './PHPMailer/src/Exception.php';
-                        require './PHPMailer/src/PHPMailer.php';
-                        require './PHPMailer/src/SMTP.php';
-                        //Import PHPMailer classes into the global namespace
-                
-                        //Create an instance; passing `true` enables exceptions
-                        $mail = new PHPMailer(true);
-                
-                            try{
-                                //Server settings
-                                $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-                                $mail->isSMTP();                                            //Send using SMTP
-                                $mail->Host       = 'smtp.hostinger.com';                     //Set the SMTP server to send through
-                                $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-                                $mail->Username   = 'test@virtualprovision.ma';                     //SMTP username
-                                $mail->Password   = 'this5655^^&U';                               //SMTP password
-                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-                                $mail->Port       = 465;  
-                                $mail->From = 'test@virtualprovision.ma';
-                                $mail->Sender = 'test@virtualprovision.ma';
-                                //Recipients
-                                $mail->setFrom('test@virtualprovision.ma', 'CultureDev 2022');
-                                $mail->addAddress($this->email, 'CultureDev team');
-                                //Add a recipient
-                                //$mail->addAddress('ellen@example.com');
-                                //Name is optional
-                                $mail->addReplyTo('test@virtualprovision.ma', 'CultureDev team');
-                                //$mail->addCC('cc@example.com');
-                                //$mail->addBCC('bcc@example.com');
+                    require './PHPMailer/src/Exception.php';
+                    require './PHPMailer/src/PHPMailer.php';
+                    require './PHPMailer/src/SMTP.php';
+                    //Import PHPMailer classes into the global namespace
 
-                                //Attachments
-                                //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-                                //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+                    //Create an instance; passing `true` enables exceptions
+                    $mail = new PHPMailer(true);
 
-                                //set email format to HTML
-                                $mail->isHTML(true); //Set email format to HTML
-                                $mail->Subject = "welcome to CultureDev 2022" . $this->fname;
-                                $mail->Body = $this->email . "<br>" . $msg;
-                                //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = SMTP::DEBUG_SERVER; //Enable verbose debug output
+                        $mail->isSMTP(); //Send using SMTP
+                        $mail->Host = 'smtp.hostinger.com'; //Set the SMTP server to send through
+                        $mail->SMTPAuth = true; //Enable SMTP authentication
+                        $mail->Username = ''; //SMTP username
+                        $mail->Password = ''; //SMTP password
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; //Enable implicit TLS encryption
+                        $mail->Port = 465;
+                        $mail->From = 'test@virtualprovision.ma';
+                        $mail->Sender = 'test@virtualprovision.ma';
+                        //Recipients
+                        $mail->setFrom('test@virtualprovision.ma', 'CultureDev 2022');
+                        $mail->addAddress($this->email, 'CultureDev team');
+                        //Add a recipient
+                        //$mail->addAddress('ellen@example.com');
+                        //Name is optional
+                        $mail->addReplyTo('test@virtualprovision.ma', 'CultureDev team');
+                        //$mail->addCC('cc@example.com');
+                        //$mail->addBCC('bcc@example.com');
 
-                                $mail->send();
-                                header('Location: ./login.php?verify=true');
-                            } catch (Exception $e) {
-                                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                            }
-                            header('Location: ./login.php?verify=true');
-                        }
+                        //Attachments
+                        //$mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
+                        //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
+
+                        //set email format to HTML
+                        $mail->isHTML(true); //Set email format to HTML
+                        $mail->Subject = "welcome to CultureDev 2022" . $this->fname;
+                        $mail->Body = $this->email . "<br>" . $msg;
+                        //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+                        $mail->send();
+                        header('Location: ./login.php?verify=true');
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                     }
-                } else {
-                    echo '<div class="alert alert-warning">
+                    header('Location: ./login.php?verify=true');
+                }
+            }
+        } else {
+            echo '<div class="alert alert-warning">
             passwords dont match
         </div>';
-                }
-            
+        }
+
     }
     // login method
     public function login()
@@ -231,7 +231,7 @@ class Userimp extends Database
             $num = $stmt->rowCount();
             if ($num > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                if (password_verify($this->password, $row['password'])){
+                if (password_verify($this->password, $row['password'])) {
                     if ($row['isactive'] == 1) {
                         $_SESSION['id'] = $row['id'];
                         $_SESSION['fname'] = $row['fname'];
@@ -298,8 +298,8 @@ class Userimp extends Database
                     $mail->isSMTP(); //Send using SMTP
                     $mail->Host = 'smtp.hostinger.com'; //Set the SMTP server to send through
                     $mail->SMTPAuth = true; //Enable SMTP authentication
-                    $mail->Username = 'test@virtualprovision.ma'; //SMTP username
-                    $mail->Password = 'myPASSwordISsecure#$%1'; //SMTP password
+                    $mail->Username = ''; //SMTP username
+                    $mail->Password = ''; //SMTP password
                     //Enable implicit TLS encryption
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
                     // Port 587 the default mail submission port. and will provide the best result
@@ -389,17 +389,17 @@ class Userimp extends Database
     }
     public function showUser()
     {
-            $sql = "SELECT * FROM users WHERE id = :id";
-            $stmt = $this->connect()->prepare($sql);
-            $stmt->bindParam(':id', $this->id);
-            $stmt->execute();
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            //concatinate in the table and fetch the table
-            $this->fname = $row['fname'];
-            $this->lname = $row['lname'];
-            $this->email = $row['email'];
-            $this->password = $row['password'];
-            echo '<div class="container p-5 bg-danger fullheight">
+        $sql = "SELECT * FROM users WHERE id = :id";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        //concatinate in the table and fetch the table
+        $this->fname = $row['fname'];
+        $this->lname = $row['lname'];
+        $this->email = $row['email'];
+        $this->password = $row['password'];
+        echo '<div class="container p-5 bg-danger fullheight">
         <div class="row d-flex justify-content-center">
             <div class="col-md-6">
                 <form method="post">
@@ -433,61 +433,58 @@ class Userimp extends Database
                         </div>';
     }
     public function updateUser()
-{
-        if(!empty($this->fname) && !empty($this->lname) && !empty($this->email) && !empty($this->password) && !empty($this->password_comfirm))
-        {
+    {
+        if (!empty($this->fname) && !empty($this->lname) && !empty($this->email) && !empty($this->password) && !empty($this->password_comfirm)) {
             $this->fname = $this->sanitize($this->fname);
             $this->lname = $this->sanitize($this->lname);
             $this->password = $this->sanitize($this->password);
             $this->password_comfirm = $this->sanitize($this->password_comfirm);
             $this->email = filter_var($this->email, FILTER_SANITIZE_EMAIL);
-        //update the user
-        $sql = "UPDATE users SET fname = :fname, lname = :lname, email = :email, password = :password WHERE id = :id";
-        //hash the password
-        $stmt = $this->connect()->prepare($sql);
-        $stmt->bindParam(':fname', $this->fname);
-        $stmt->bindParam(':lname', $this->lname);
-        $stmt->bindParam(':email', $this->email);
-        $stmt->bindParam(':id', $this->id);
-        if(!empty($this->password) && strlen($this->password) > 8 && $this->password == $this->password_comfirm){
-            $this->password = password_hash($this->password, PASSWORD_DEFAULT);
-            $stmt->bindParam(':password', $this->password);
-        if($stmt->execute()){
-            echo '<div class="alert alert-success">
+            //update the user
+            $sql = "UPDATE users SET fname = :fname, lname = :lname, email = :email, password = :password WHERE id = :id";
+            //hash the password
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->bindParam(':fname', $this->fname);
+            $stmt->bindParam(':lname', $this->lname);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':id', $this->id);
+            if (!empty($this->password) && strlen($this->password) > 8 && $this->password == $this->password_comfirm) {
+                $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+                $stmt->bindParam(':password', $this->password);
+                if ($stmt->execute()) {
+                    echo '<div class="alert alert-success">
             your changes have been saved.';
-        }else{
-            echo '<div class="alert alert-warning">
+                } else {
+                    echo '<div class="alert alert-warning">
             something happened please try again.
         </div>';
-        }
-        } else{
-            echo '<div class="alert alert-warning">
+                }
+            } else {
+                echo '<div class="alert alert-warning">
             Passwords do not match or empty';
+            }
+        } else {
+            echo '<div class="alert alert-warning">
+        please fill all the fields';
         }
     }
-    else{
-        echo '<div class="alert alert-warning">
-        please fill all the fields';
-    }
-}
 
-//method to delete profile
+    //method to delete profile
     public function deleteUser()
     {
         //remove the user from the database
         $sql = "DELETE FROM users WHERE id = :id";
         $stmt = $this->connect()->prepare($sql);
         $stmt->bindParam(':id', $this->id);
-    try{
-        if ($stmt->execute()) {
-            //call logout method
-            $this->logout();
-        }
-    }catch(PDOException $e){
+        try {
+            if ($stmt->execute()) {
+                //call logout method
+                $this->logout();
+            }
+        } catch (PDOException $e) {
             echo '<div class="alert alert-warning">
             something happened please try again.
         </div>';
         }
     }
-    
 }

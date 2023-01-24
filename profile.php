@@ -61,7 +61,6 @@ include 'component.php';
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-info text-white text-lg rounded-circle">
-                                            <!-- <i class="bi bi-clock-history"></i> -->
                                         </div>
                                     </div>
                                 </div>
